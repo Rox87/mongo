@@ -29,14 +29,14 @@ def get_mongodb_connection_string():
     mongo_username = os.getenv('mongo_username')
     mongo_password = os.getenv('mongo_password')
     
-    # Validate that credentials are available
-    if not mongo_username or not mongo_password:
-        print("Error: MongoDB credentials not found in environment variables.")
-        print("Make sure you have a .env file with mongo_username and mongo_password defined.")
-        sys.exit(1)
-    
-    # Construct the MongoDB connection string
-    return f"mongodb://{mongo_username}:{mongo_password}@localhost:27017/"
+    # Check if credentials are available
+    if mongo_username and mongo_password:
+        # Use authentication if credentials are provided
+        return f"mongodb://{mongo_username}:{mongo_password}@localhost:27017/"
+    else:
+        # Connect without authentication if no credentials are provided
+        print("Warning: Using MongoDB without authentication")
+        return "mongodb://localhost:27017/"
 
 def print_all_documents(collection):
     """
